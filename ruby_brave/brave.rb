@@ -5,13 +5,15 @@ class Brave < Character
   CRITICAL＿ATTACK_CONSTANT = 1.5
 
   def attack(monster)
-    puts "#{name}の攻撃"
+    # puts "#{name}の攻撃"
 
     attack_type = decision_attack_type
     damage = calculate_damage(target:monster, attack_type:attack_type)
     cause_damage(target:monster,damage:damage)
 
-    puts "#{monster.name}の残りHPは#{monster.hp}だ"
+    attack_message(attack_type: attack_type)
+    damage_message(damage:damage,target:monster)
+    # puts "#{monster.name}の残りHPは#{monster.hp}だ"
   end
 
   private
@@ -24,7 +26,7 @@ class Brave < Character
 
     target.hp = 0 if target.hp < 0
 
-    puts "#{target.name}に#{damage}ダメージあたえた！"
+    # puts "#{target.name}に#{damage}ダメージあたえた！"
   end
 
   def calculate_damage(**params)
@@ -32,7 +34,7 @@ class Brave < Character
     attack_type = params[:attack_type]
 
     if attack_type == "critical"
-      puts "クリティカル！"
+      # puts "クリティカル！"
       calculate_special_attack - target.defense
     else
       @offense - target.defense

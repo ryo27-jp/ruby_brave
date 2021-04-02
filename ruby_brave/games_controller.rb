@@ -1,4 +1,7 @@
+require './message_dialog'
+
 class Games_controller
+  include MessageDialog
 
   EXP_CONSTANT = 2
   GOLD_CONSTANT = 3
@@ -27,22 +30,21 @@ class Games_controller
   end
   
   def calculate_exp_and_gold
-    exp = (@monster.offense + @monster.defense)* EXP_CONSTANT
-    gold = (@monster.offense + @monster.defense)* GOLD_CONSTANT
-    result = {exp:exp, gold:gold}
-
-    result
+    if brave_win?
+      brave_win_flag = true
+      exp = (@monster.offense + @monster.defense)* EXP_CONSTANT
+      gold = (@monster.offense + @monster.defense)* GOLD_CONSTANT
+    else
+      brave_win_flag = false
+      exp = 0
+      gold = 0
+    end
+    {brave_win_flag:brave_win_flag, exp:exp, gold:gold}
   end
 
   def battle_judgment
-    if brave_win?
-      result = calculate_exp_and_gold
-      puts "#{@brave.name}はたたかいに買った"
-      puts "#{result[:exp]}の経験値と#{result[:gold]}ゴールドを獲得した"
-    else
-      puts "#{@brave.name}はちからつきた"
-      puts "目の前が真っ暗になった"
-    end
+    result = calculate_exp_and_gold
+    end_message(result)
   end
 
   def build_characters(**params)
